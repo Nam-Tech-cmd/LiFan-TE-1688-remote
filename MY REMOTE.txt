@@ -1,0 +1,95 @@
+#include <IRremote.h>
+
+const int b2  = 2;
+const int b3  = 3;
+const int b4  = 4;
+const int b5  = 5;
+const int b6  = 6;
+const int b7  = 8;
+const int IRPin = 14; 
+
+const uint16_t ON_SP[71] = {1280,370, 1280,420, 430,1220, 1280,420, 1230,420, 430,1270, 430,1220, 430,1220, 430,1270, 430,1220, 1280,420, 430,7970, 1280,420, 1230,420, 430,1220, 1280,420, 1280,370, 430,1270, 430,1220, 480,1220, 430,1220, 430,1270, 1230,420, 430,7970, 1280,420, 1280,370, 430,1270, 1280,370, 1280,370, 480,1220, 430,1220, 430,1270, 430,1220, 430,1270, 1230,420, 430};
+const uint16_t OFF[119] = {1230,420, 1280,420, 430,1220, 1280,420, 1230,420, 430,1270, 380,1270, 430,1270, 380,1220, 480,1220, 430,1220, 1280,7720, 1230,420, 1280,420, 380,1270, 1230,470, 1230,420, 430,1220, 430,1270, 430,1220, 430,1270, 380,1270, 430,1270, 1230,7670, 1280,420, 1230,470, 380,1270, 1230,420, 1280,420, 430,1220, 430,1270, 380,1270, 430,1270, 380,1270, 430,1220, 1280,7720, 1230,420, 1230,420, 430,1270, 1230,420, 1230,470, 380,1270, 430,1220, 430,1270, 380,1270, 430,1270, 380,1270, 1230,7720, 1230,470, 1230,420, 430,1270, 1230,420, 1230,420, 430,1270, 380,1270, 430,1270, 380,1270, 430,1270, 380,1220, 1280};
+const uint16_t MODE[23] = {1230,470, 1230,420, 430,1270, 1230,420, 1230,420, 430,1270, 430,1220, 430,1220, 430,1270, 1280,420, 380,1270, 430};
+const uint16_t TIMER[23] = {1230,420, 1230,470, 380,1270, 1230,470, 1230,420, 430,1220, 430,1270, 430,1220, 1280,420, 380,1270, 430,1270, 380};
+const uint16_t LAMP[71] = {1280,420, 1280,370, 430,1270, 1230,420, 1280,370, 1280,420, 430,1220, 430,1270, 430,1220, 480,1220, 1280,370, 1280,7120, 1280,420, 1280,370, 430,1220, 1330,370, 1280,420, 1230,420, 430,1270, 380,1270, 430,1220, 480,1220, 1230,420, 1280,7120, 1280,420, 1280,370, 430,1270, 1280,370, 1280,420, 1230,420, 430,1270, 430,1220, 430,1270, 380,1270, 1280,370, 1330};
+const uint16_t SWING[23] = {1230,470, 1230,420, 430,1220, 1280,420, 1230,420, 430,1270, 380,1270, 1230,470, 380,1270, 430,1270, 380,1270, 430};
+
+void setup() {
+
+   pinMode(b2, INPUT_PULLUP);
+   pinMode(b3, INPUT_PULLUP);
+   pinMode(b4, INPUT_PULLUP);
+   pinMode(b5, INPUT_PULLUP);
+   pinMode(b6, INPUT_PULLUP);
+   pinMode(b7, INPUT_PULLUP);
+
+   IrSender.begin(IRPin);
+
+}
+
+void loop() {
+
+   static bool lastButtonState2 = HIGH;
+   static bool lastButtonState3 = HIGH;
+   static bool lastButtonState4 = HIGH;
+   static bool lastButtonState5 = HIGH;
+   static bool lastButtonState6 = HIGH;
+   static bool lastButtonState7 = HIGH;
+  
+   bool b2State = digitalRead(b2);
+   bool b3State = digitalRead(b3);
+   bool b4State = digitalRead(b4);
+   bool b5State = digitalRead(b5);
+   bool b6State = digitalRead(b6);
+   bool b7State = digitalRead(b7);
+
+   if (b2State != lastButtonState2)
+   {
+      if (digitalRead(b2) == HIGH) {
+      IrSender.sendRaw(ON_SP, sizeof(ON_SP) / sizeof(ON_SP[0]), 38);
+      }
+      lastButtonState2 = b2State;
+   }
+   
+   if (b3State != lastButtonState3)
+   {
+      if (digitalRead(b3) == HIGH) {
+      IrSender.sendRaw(OFF, sizeof(OFF) / sizeof(OFF[0]), 38);
+      }
+      lastButtonState3 = b3State;
+   }
+
+   if (b4State != lastButtonState4)
+   {
+      if (digitalRead(b4) == HIGH) {
+      IrSender.sendRaw(MODE, sizeof(SWING) / sizeof(MODE[0]), 38);
+      }
+      lastButtonState4 = b4State;
+   }
+
+    if (b5State != lastButtonState5)
+   {
+      if (digitalRead(b5) == HIGH) {
+      IrSender.sendRaw(TIMER, sizeof(TIMER) / sizeof(TIMER[0]), 38);
+      }
+      lastButtonState5 = b5State;
+   }
+      
+    if (b6State != lastButtonState6)
+   {
+      if (digitalRead(b6) == HIGH) {
+      IrSender.sendRaw(LAMP, sizeof(LAMP) / sizeof(LAMP[0]), 38);
+      }
+      lastButtonState6 = b6State;
+   }
+        
+    if (b7State != lastButtonState7)
+   {
+      if (digitalRead(b7) == HIGH) {
+      IrSender.sendRaw(SWING, sizeof(SWING) / sizeof(SWING[0]), 38);
+      }
+      lastButtonState7 = b7State;
+   }
+
+}
